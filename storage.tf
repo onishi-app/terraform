@@ -50,11 +50,10 @@ module "s3_sample_bucket" {
   rule_id      = "sample-lifecycle-rule"
   filter = [
     {
-      and                      = false
+      and                      = true
       object_size_greater_than = null
       object_size_less_than    = null
       prefix                   = "error/"
-      tag                      = null
     }
   ]
   transition = [{
