@@ -48,14 +48,12 @@ module "s3_sample_bucket" {
   # Lifecycle Rule
   rule_created = true
   rule_id      = "sample-lifecycle-rule"
-  filter = [
-    {
+  filter = [{
       and                      = true
       object_size_greater_than = null
       object_size_less_than    = null
       prefix                   = "error/"
-    }
-  ]
+  }]
   transition = [{
     date          = null
     days          = 2
