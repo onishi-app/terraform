@@ -181,3 +181,25 @@ variable "non_ver_expiration" {
   default     = []
   description = "非現行バージョンの削除アクション"
 }
+
+#
+# aws_s3_bucket_policy
+#
+variable "policy_statement" {
+  type = list(object({
+    principals = object({
+      type        = string       # プリンシパルのタイプ。有効な値は AWS、Service、Federated、CanonicalUser および * 
+      identifiers = list(string) # プリンシパルの識別子のリスト
+    })
+    effect    = string       # Allow もしくは Deny
+    actions   = list(string) # 許可 もしくは 拒否するアクションのリスト
+    resources = list(string) # 対称のリソースのリスト。バケットARN以降の文字列を指定。
+    condition = list(object({
+      test     = string       # 評価する IAM 条件演算子の名前
+      variable = string       # 条件を評価する値
+      values   = list(string) # 条件を適用するコンテキスト変数の名前
+    }))
+  }))
+  default     = []
+  description = "ポリシーのリスト"
+}

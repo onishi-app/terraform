@@ -5,8 +5,28 @@ module "s3_logs" {
   source = "./modules/s3"
 
   # common
-  prefix  = "${var.system}-${var.env}"
+  prefix  = local.prefix
   subname = "logs"
+
+  # Bucket Policy
+  policy_statement = [
+    {
+      principals = {
+        type        = "Service"
+        identifiers = ["logging.s3.amazonaws.com"]
+      }
+      effect    = "Allow"
+      actions   = ["s3:PutObject"]
+      resources = ["arn:aws:s3:::${local.prefix}-s3-logs/*"]
+      condition = [
+        {
+          test     = "StringEquals"
+          variable = "aws:SourceAccount"
+          values   = [data.aws_caller_identity.self.account_id]
+        }
+      ]
+    }
+  ]
 }
 
 #
@@ -16,7 +36,7 @@ module "s3_sample_bucket" {
   source = "./modules/s3"
 
   # common
-  prefix  = "${var.system}-${var.env}"
+  prefix  = local.prefix
   subname = "sample-bucket"
 
   # Transfer Acceleration
@@ -49,10 +69,10 @@ module "s3_sample_bucket" {
   rule_created = true
   rule_id      = "sample-lifecycle-rule"
   filter = [{
-      and                      = true
-      object_size_greater_than = null
-      object_size_less_than    = null
-      prefix                   = "error/"
+    and                      = true
+    object_size_greater_than = null
+    object_size_less_than    = null
+    prefix                   = "error/"
   }]
   transition = [{
     date          = null

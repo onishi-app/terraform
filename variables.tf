@@ -1,3 +1,6 @@
+locals {
+  prefix = format("%s-%s", var.system, var.env)
+}
 variable "system" {
   type        = string
   default     = "terra"

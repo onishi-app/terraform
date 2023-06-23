@@ -164,3 +164,38 @@ resource "aws_s3_bucket_lifecycle_configuration" "this" {
     }
   }
 }
+
+#
+# Bucket Policy
+#
+data "aws_iam_policy_document" "this" {
+  count = length(var.policy_statement) > 0 ? 1 : 0
+
+  dynamic "statement" {
+    for_each = var.policy_statement
+    content {
+      principals {
+        type        = statement.value.principals.type
+        identifiers = statement.value.principals.identifiers
+      }
+      effect    = statement.value.effect
+      actions   = statement.value.actions
+      resources = statement.value.resources
+
+      dynamic "condition" {
+        for_each = try(statement.value.condition, [])
+        content {
+          test     = condition.value.test
+          variable = condition.value.variable
+          values   = condition.value.values
+        }
+      }
+    }
+  }
+}
+resource "aws_s3_bucket_policy" "this" {
+  count = length(var.policy_statement) > 0 ? 1 : 0
+
+  bucket = aws_s3_bucket.this.id
+  policy = data.aws_iam_policy_document.this[0].json
+}
