@@ -2,7 +2,7 @@
 # ログ格納用S3バケット
 #
 module "s3_logs" {
-  source = "./modules/s3"
+  source = "./modules/storage/s3"
 
   # common
   prefix  = local.prefix
@@ -33,7 +33,7 @@ module "s3_logs" {
 # サンプルS3バケット
 #
 module "s3_sample_bucket" {
-  source = "./modules/s3"
+  source = "./modules/storage/s3"
 
   # common
   prefix  = local.prefix

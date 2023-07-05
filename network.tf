@@ -2,7 +2,7 @@
 # サンプル セキュリティグループ１
 #
 module "sample_sg_1" {
-  source = "./modules/security_group"
+  source = "./modules/network/security_group"
 
   prefix  = local.prefix
   subname = "sample-sg-1"
@@ -29,7 +29,7 @@ module "sample_sg_1" {
 # サンプル セキュリティグループ２
 #
 module "sample_sg_2" {
-  source = "./modules/security_group"
+  source = "./modules/network/security_group"
 
   prefix  = local.prefix
   subname = "sample-sg-2"
